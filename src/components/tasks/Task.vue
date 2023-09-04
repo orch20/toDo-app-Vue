@@ -25,7 +25,11 @@
             </div>
             <!-- <div class="task-date">24 Feb 12:00</div> -->
         </div>
-        <TaskActions @edit="$event=>isEdit = true" v-show="!isEdit" />
+        <TaskActions 
+            @edit="$event=>isEdit = true" 
+            @remove="removeTask"
+
+        v-show="!isEdit" />
     </li>
 </template>
 
@@ -65,6 +69,15 @@ const markTaskAsCompleted = () => {
     emit('completed', updatedTask);
 }
 
+const removeTask = () => {
+    if (confirm('Are you sure?')) {
+        emit('removed', props.task)
+        
+    }
+    
+    
+}
+
 
 
     const props = defineProps (
@@ -75,6 +88,6 @@ const markTaskAsCompleted = () => {
             }
         })
 
-    const emit = defineEmits(['updated', 'completed'])
+    const emit = defineEmits(['updated', 'completed', 'removed'])
 
 </script>
