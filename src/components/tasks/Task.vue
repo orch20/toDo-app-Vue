@@ -36,6 +36,11 @@
 <script setup>
 import { computed, ref } from 'vue';
 import TaskActions from './TaskActions.vue';
+import {useTaskStore} from '../../stores/task';
+
+const store = useTaskStore();
+
+const { handelUpdatedTask, handelCompletedTask, handelRemovedTask } = store;
 
 const isEdit = ref(false);
 const completedClass = computed(() => props.task.is_completed ? 'completed' : '');
@@ -45,7 +50,7 @@ const vFocus = {
     mounted: (el) => el.focus(),
 };
 
-const updateTask = event => {
+const updateTask = async event => {
     // if (editingTask.value === props.task.name) return;
     const updatedTask = {
         ...props.task,
@@ -53,7 +58,8 @@ const updateTask = event => {
 
     }
     isEdit.value = false;
-    emit('updated', updatedTask);
+    await handelUpdatedTask(updatedTask);
+    
 }
 
 const undo = () => { 
@@ -61,18 +67,18 @@ const undo = () => {
     editingTask.value = props.task.name;
 }
 
-const markTaskAsCompleted = () => { 
+const markTaskAsCompleted = async () => { 
     const updatedTask = {
         ...props.task,
         is_completed: !props.task.is_completed
     }
-    emit('completed', updatedTask);
+    await handelCompletedTask(updatedTask);
+    
 }
 
-const removeTask = () => {
+const removeTask = async () => {
     if (confirm('Are you sure?')) {
-        emit('removed', props.task)
-        
+        await handelRemovedTask(props.task);
     }
     
     
@@ -87,7 +93,5 @@ const removeTask = () => {
                 // required: true
             }
         })
-
-    const emit = defineEmits(['updated', 'completed', 'removed'])
 
 </script>

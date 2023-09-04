@@ -18,12 +18,44 @@ export const useTaskStore = defineStore('taskStore', () => {
     tasks.value = data.data
   }
 
+  const handelAddedTask = async (task) => {
+    const { data: createdTask } = await createTask(task)
+    tasks.value.unshift(createdTask.data)
+  }
+
+  const handelUpdatedTask = async (task) => {
+    const { data: updatedTask } = await updateTask(task.id, {
+      name: task.name
+    })
+    const currentTask = tasks.value.find((t) => t.id === task.id)
+    currentTask.name = updatedTask.data.name
+  }
+
+  const handelCompletedTask = async (task) => {
+    const { data: updatedTask } = await completeTask(task.id, {
+      is_completed: task.is_completed
+    })
+    const currentTask = tasks.value.find((t) => t.id === task.id)
+    currentTask.is_completed = updatedTask.data.is_completed
+  }
+
+  const handelRemovedTask = async (task) => {
+    await deleteTask(task.id)
+
+    const index = tasks.value.findIndex((t) => t.id === task.id)
+    tasks.value.splice(index, 1)
+  }
+
   return {
     tasks,
     task,
     completedTasks,
     uncompletedTasks,
-    fetchAllTasks
+    fetchAllTasks,
+    handelAddedTask,
+    handelUpdatedTask,
+    handelCompletedTask,
+    handelRemovedTask
   }
 })
 
