@@ -6,14 +6,20 @@
                         <!-- Add new Task -->
                         <NewTask @added="handelAddedTask"/>
                         <!-- List of tasks -->
-                        <TasksList :tasks="uncompletedTasks"/>
+                        <TasksList 
+                        :tasks="uncompletedTasks"
+                        @updated="handelUpdatedTask"/>
                         <div class="text-center my-3" v-show="showToggleCompletedBtn">
                             <button class="btn btn-sm btn-secondary"
                              @click="$event=> showCompletedTasks = !showCompletedTasks">
                                 {{ showCompletedTasks ? 'Hide' : 'Show' }} completed
                             </button>
                         </div>
-                        <TasksList :tasks="completedTasks" :show="completedTaskVisible && showCompletedTasks"/>
+                        <TasksList 
+                        :tasks="completedTasks" 
+                        :show="completedTaskVisible && showCompletedTasks"
+                        />
+                        
                     </div>
                 </div>
             </div>
@@ -22,7 +28,7 @@
 
 <script setup>
 import { onMounted,ref, computed  } from 'vue';
-import { allTasks, createTask } from '../http/task-api'
+import { allTasks, createTask, updateTask } from '../http/task-api'
 import TasksList from '../components/tasks/TasksList.vue'
 import NewTask from '../components/tasks/NewTask.vue'
 
@@ -45,6 +51,15 @@ const completedTaskVisible = computed(
 const handelAddedTask = async task => {
     const { data:createdTask } = await createTask(task);
     tasks.value.unshift(createdTask.data);
+}
+
+const handelUpdatedTask = async task => {
+    console.log(task);
+    const {data: updatedTask} = await updateTask(task.id, {
+    name: task.name,
+    });
+    const currentTask = tasks.value.find(t => t.id === task.id);
+    currentTask.name = updatedTask.data.name;
 }
 
 
