@@ -54,7 +54,6 @@ const handelAddedTask = async task => {
 }
 
 const handelUpdatedTask = async task => {
-    console.log(task);
     const {data: updatedTask} = await updateTask(task.id, {
     name: task.name,
     });

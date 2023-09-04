@@ -8,14 +8,16 @@
             @dblclick="$event => isEdit=true">
                 <div class="relative" v-if="isEdit">
                     <input class="editable-task" 
-                    type="text" 
-                    @keyup.esc="$event=>isEdit=false" 
-                    @keyup.enter="updateTask"
-                    v-focus />
+                        type="text" 
+                        v-focus
+                        @keyup.esc="undo" 
+                        @keyup.enter="updateTask"
+                        v-model="editingTask"
+                    />
                 </div>
                 <span v-else>{{ task.name }}</span>
             </div>
-            <div class="task-date">24 Feb 12:00</div>
+            <!-- <div class="task-date">24 Feb 12:00</div> -->
         </div>
         <TaskActions @edit="$event=>isEdit = true" v-show="!isEdit" />
     </li>
@@ -27,12 +29,14 @@ import TaskActions from './TaskActions.vue';
 
 const isEdit = ref(false);
 const completedClass = computed(() => props.task.is_completed ? 'completed' : '');
+const editingTask = ref(props.task.name);
 
 const vFocus = {
     mounted: (el) => el.focus(),
 };
 
 const updateTask = event => {
+    // if (editingTask.value === props.task.name) return;
     const updatedTask = {
         ...props.task,
         name: event.target.value
@@ -40,6 +44,11 @@ const updateTask = event => {
     }
     isEdit.value = false;
     emit('updated', updatedTask);
+}
+
+const undo = () => { 
+    isEdit.value = false;
+    editingTask.value = props.task.name;
 }
 
 
