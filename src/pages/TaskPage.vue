@@ -8,7 +8,9 @@
                         <!-- List of tasks -->
                         <TasksList 
                         :tasks="uncompletedTasks"
-                        @updated="handelUpdatedTask"/>
+                        @updated="handelUpdatedTask"
+                        @completed="handelCompletedTask"
+                        />
                         <div class="text-center my-3" v-show="showToggleCompletedBtn">
                             <button class="btn btn-sm btn-secondary"
                              @click="$event=> showCompletedTasks = !showCompletedTasks">
@@ -18,6 +20,8 @@
                         <TasksList 
                         :tasks="completedTasks" 
                         :show="completedTaskVisible && showCompletedTasks"
+                        @updated="handelUpdatedTask"
+                        @completed="handelCompletedTask"
                         />
                         
                     </div>
@@ -28,7 +32,7 @@
 
 <script setup>
 import { onMounted,ref, computed  } from 'vue';
-import { allTasks, createTask, updateTask } from '../http/task-api'
+import { allTasks, createTask, updateTask, completeTask } from '../http/task-api'
 import TasksList from '../components/tasks/TasksList.vue'
 import NewTask from '../components/tasks/NewTask.vue'
 
@@ -59,6 +63,14 @@ const handelUpdatedTask = async task => {
     });
     const currentTask = tasks.value.find(t => t.id === task.id);
     currentTask.name = updatedTask.data.name;
+}
+
+const handelCompletedTask = async task => {
+    const {data: updatedTask} = await completeTask(task.id, {
+        is_completed: task.is_completed,
+    });
+    const currentTask = tasks.value.find(t => t.id === task.id);
+    currentTask.is_completed = updatedTask.data.is_completed;
 }
 
 

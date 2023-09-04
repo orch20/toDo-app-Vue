@@ -1,7 +1,13 @@
 <template>
     <li class="list-group-item py-3">
         <div class="d-flex justify-content-start align-items-center">
-            <input class="form-check-input mt-0" :class="completedClass" type="checkbox" :checked="task.is_completed" />
+            <input 
+            class="form-check-input mt-0" 
+            type="checkbox" 
+            :class="completedClass" 
+            :checked="task.is_completed"
+            @change="markTaskAsCompleted"
+            />
             <div class="ms-2 flex-grow-" 
             :class="completedClass" 
             title="Double click the text to edit or remove"
@@ -51,6 +57,14 @@ const undo = () => {
     editingTask.value = props.task.name;
 }
 
+const markTaskAsCompleted = () => { 
+    const updatedTask = {
+        ...props.task,
+        is_completed: !props.task.is_completed
+    }
+    emit('completed', updatedTask);
+}
+
 
 
     const props = defineProps (
@@ -61,6 +75,6 @@ const undo = () => {
             }
         })
 
-    const emit = defineEmits(['updated'])
+    const emit = defineEmits(['updated', 'completed'])
 
 </script>
