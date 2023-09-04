@@ -37,18 +37,24 @@ import { onMounted,ref, computed  } from 'vue';
 import { allTasks, createTask, updateTask, completeTask, deleteTask } from '../http/task-api'
 import TasksList from '../components/tasks/TasksList.vue'
 import NewTask from '../components/tasks/NewTask.vue'
+import { useTaskStore } from '../stores/task'
+import { storeToRefs } from 'pinia'
+
+const store = useTaskStore();
+const { completedTasks, uncompletedTasks } = storeToRefs(store);
+const {fetchAllTasks} = store
 
 const tasks = ref([]);
 const showCompletedTasks = ref(false);
 
 onMounted(async () => {
-    const { data } = await allTasks();
-    tasks.value = data.data;
-    
+    // const { data } = await allTasks();
+    // tasks.value = data.data;
+    await fetchAllTasks ()   
 });
 
-const uncompletedTasks = computed(() => tasks.value.filter(task => !task.is_completed));
-const completedTasks = computed(() => tasks.value.filter(task => task.is_completed));
+// const uncompletedTasks = computed(() => tasks.value.filter(task => !task.is_completed));
+// const completedTasks = computed(() => tasks.value.filter(task => task.is_completed));
 const showToggleCompletedBtn = computed(
     () => uncompletedTasks.value.length > 0 && completedTasks.value.length > 0);
 const completedTaskVisible = computed(
