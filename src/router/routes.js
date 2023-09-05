@@ -15,10 +15,10 @@ const routes = [
   {
     path: '/tasks',
     component: TaskPage,
-    name: 'tasks',
-    meta: {
-      auth: true
-    }
+    name: 'tasks'
+    // meta: {
+    //   auth: true
+    // }
   },
   {
     path: '/login',
