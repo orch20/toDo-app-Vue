@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 
 export default createRouter({
+  routes,
   history: createWebHistory(),
-  routes
+  linkActiveClass: 'active'
 })
