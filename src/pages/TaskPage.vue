@@ -37,7 +37,7 @@ const store = useTaskStore();
 const { completedTasks, uncompletedTasks } = storeToRefs(store);
 const {fetchAllTasks } = store
 
-const showCompletedTasks = ref(false);
+
 
 onMounted(async () => {
     await fetchAllTasks ()   
@@ -48,4 +48,5 @@ const showToggleCompletedBtn = computed(
 const completedTaskVisible = computed(
     () => uncompletedTasks.value.length === 0 || completedTasks.value.length > 0)
 
+const showCompletedTasks = ref(false || completedTaskVisible.value);
     </script>
