@@ -33,11 +33,17 @@ export const useAuthStore = defineStore('authStore', () => {
   }
 
   const handelRegister = async (newUser) => {
-    await register(newUser)
-    await handelLogin({
-      email: newUser.email,
-      password: newUser.password
-    })
+    try {
+      await register(newUser)
+      await handelLogin({
+        email: newUser.email,
+        password: newUser.password
+      })
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        errors.value = error.response.data.errors
+      }
+    }
   }
 
   const handelLogout = async () => {
