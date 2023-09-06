@@ -28,9 +28,20 @@
                         </li>
                     </template>
                     <template v-else>
-                        <li class="nav-item" >
-                            <router-link  :to="{ name: 'logout' }" class="btn btn-outline-secondary ms-2" @click.prevent="logout" >Logout</router-link>
-                        </li>
+                        <!-- <li class="nav-item" >
+                            
+                        </li> -->
+                        <li class="nav-item dropdown" >
+                            <a class="nav-link dropdown-toggle" :class="toggleClass" @click.prevent="toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{store.user.name}}
+                            </a>
+                            <ul class="dropdown-menu" :class="toggleClass" v-show="isOpen">
+                                <li>
+                                    <router-link  :to="{ name: 'logout' }" class="dropdown-item" @click.prevent="logout" >Logout</router-link>
+                                </li>
+                                
+                            </ul>
+                            </li>
                     </template>
                 </ul>
             </div>
@@ -42,12 +53,19 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
+import { computed, ref } from 'vue';
 
 const router = useRouter();
 const store = useAuthStore();
+const isOpen = ref(false);
+
+const toggle = () => isOpen.value = !isOpen.value;
+const toggleClass = computed(() => isOpen.value ? 'show' : '');
+
 
 const logout = async () => {
     await store.handelLogout();
+    isOpen.value = false;
     router.push({ name: 'login' });
 }
     
