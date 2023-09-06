@@ -4,7 +4,7 @@ import LoginPage from '../pages/LoginPage.vue'
 import RegisterPage from '../pages/RegisterPage.vue'
 import LogoutPage from '../pages/LogoutPage.vue'
 import SummaryPage from '../pages/SummaryPage.vue'
-import NotFoundPage from '../components/errors/NotFoundErrorPage.vue'
+import NotFoundPage from '../pages/errors/NotFoundErrorPage.vue'
 
 const routes = [
   {

@@ -11,6 +11,7 @@ export const useAuthStore = defineStore('authStore', () => {
     try {
       const { data } = await getUser()
       user.value = data
+      console.log(user.value)
     } catch (error) {
       user.value = null
     }
