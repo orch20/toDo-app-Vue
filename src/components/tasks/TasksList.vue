@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import Task from './task.vue'
+import Task from './Task.vue'
 
 defineProps({
     tasks: Array,
